@@ -1,0 +1,318 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Speech to ISL Result</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Raleway', sans-serif;
+      color: #fff;
+      background: radial-gradient(circle at top left, rgba(125, 92, 255, 0.18), transparent 28%),
+                  radial-gradient(circle at bottom right, rgba(255, 92, 182, 0.16), transparent 28%),
+                  linear-gradient(135deg, #0d153f 0%, #342b69 45%, #523e97 100%);
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 40px 0;
+      gap: 16px;
+    }
+
+    .top-nav h1 {
+      margin: 0;
+      font-family: 'Bree Serif', serif;
+      font-size: 1.9rem;
+      letter-spacing: 0.02em;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(12px);
+    }
+
+    .profile-pic {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #8b5cff, #ff5c95);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      box-shadow: 0 18px 30px rgba(0, 0, 0, 0.22);
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .profile-info .name {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .profile-info .status {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .logout-btn {
+      background: #ff5c8a;
+      border: none;
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .page-grid {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 40px 40px;
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 28px;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 28px;
+      padding: 34px;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(18px);
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      font-family: 'Bree Serif', serif;
+      font-size: 2.5rem;
+      line-height: 1.05;
+    }
+
+    .panel p {
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1.75;
+      margin: 22px 0;
+    }
+
+    .data-block {
+      display: grid;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .data-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 22px;
+      padding: 20px 24px;
+    }
+
+    .data-card h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+      color: #f6efff;
+    }
+
+    .data-card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.7;
+      word-break: break-word;
+    }
+
+    .video-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 0;
+    }
+
+    .video-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-top: 56.25%;
+    }
+
+    .video-wrapper video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 26px;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .btn-large {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      min-width: 170px;
+      border-radius: 18px;
+      border: none;
+      padding: 16px 0;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .btn-large:hover,
+    .btn-large:focus,
+    .btn-large:active {
+      text-decoration: none;
+      outline: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #8b5cff 0%, #ff5c95 100%);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+
+    .btn-secondary:hover,
+    .btn-primary:hover {
+      filter: brightness(1.05);
+    }
+
+    @media (max-width: 980px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .top-nav {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px 16px 0;
+      }
+      .profile {
+        margin-left: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="top-nav">
+    <h1>Generated ISL Video</h1>
+    <div class="profile" id="profileCard">
+      <div class="profile-pic" id="profileAvatar">AS</div>
+      <div class="profile-info">
+        <div class="name" id="profileName">User Name</div>
+        <div class="status">Logged in</div>
+      </div>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+
+  <div class="page-grid">
+    <section class="panel">
+      <h2>Your output is ready</h2>
+      <p>The speech has been converted into Indian Sign Language video output. Review the original text and the ISL syntax below.</p>
+      <div class="data-block">
+        <div class="data-card">
+          <h3>Original text</h3>
+          <p><%= normalSyntax %></p>
+        </div>
+        <div class="data-card">
+          <h3>ISL syntax</h3>
+          <p><%= islSyntax %></p>
+        </div>
+      </div>
+      <div class="action-row">
+        <a href="/speech" class="btn-large btn-primary">Generate Again</a>
+        <a href="/speech" class="btn-large btn-secondary">Back</a>
+      </div>
+    </section>
+
+    <section class="panel video-card">
+      <div class="video-wrapper">
+        <video id="videoPlayer" controls muted autoplay>
+          <source src="/video" type="video/mp4" />
+        </video>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function getInitials(name) {
+      if (!name) return 'US';
+      const words = name.trim().split(/\s+/);
+      if (words.length === 1) return words[0].charAt(0).toUpperCase();
+      return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
+    }
+
+    const savedUser = localStorage.getItem('voiceIslUser');
+    const loggedIn = localStorage.getItem('voiceIslLoggedIn');
+    if (!savedUser || loggedIn !== 'true') {
+      window.location.href = '/login';
+    } else {
+      const user = JSON.parse(savedUser);
+      const displayName = user.username || user.email || 'User';
+      document.getElementById('profileName').textContent = displayName;
+      document.getElementById('profileAvatar').textContent = getInitials(displayName);
+    }
+
+    document.getElementById('profileCard').addEventListener('click', function () {
+      window.location.href = '/profile';
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', function () {
+      localStorage.removeItem('voiceIslLoggedIn');
+      window.location.href = '/login';
+    });
+  </script>
+</body>
+
+</html>

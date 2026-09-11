@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to ISL</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Raleway', sans-serif;
+            background: radial-gradient(circle at top left, rgba(125, 92, 255, 0.2), transparent 30%),
+                        radial-gradient(circle at bottom right, rgba(255, 92, 182, 0.18), transparent 28%),
+                        linear-gradient(135deg, #0f1a3f, #352a6f 45%, #5a47b5 100%);
+            color: #fff;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 24px 40px 0;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            padding: 12px 18px;
+            backdrop-filter: blur(12px);
+        }
+
+        .profile-pic {
+            min-width: 50px;
+            min-height: 50px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #5b3ceb, #ff5c95);
+            box-shadow: 0 18px 30px rgba(0, 0, 0, 0.22);
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .profile-info {
+            text-align: left;
+        }
+
+        .profile-info .name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+
+        .profile-info .status {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.74);
+        }
+
+        .logout-btn {
+            background: #ff5c8a;
+            border: none;
+            color: #fff;
+            border-radius: 999px;
+            padding: 10px 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-1px);
+            background: #ff456f;
+        }
+
+        .page-grid {
+            max-width: 1240px;
+            margin: 0 auto 60px;
+            padding: 24px 40px 0;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 28px;
+        }
+
+        .hero-panel,
+        .form-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 28px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.18);
+            backdrop-filter: blur(18px);
+            padding: 36px;
+        }
+
+        .hero-panel h1 {
+            margin-top: 0;
+            font-family: 'Bree Serif', serif;
+            font-size: clamp(2.8rem, 4vw, 3.6rem);
+            line-height: 1.02;
+        }
+
+        .hero-panel p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin: 24px 0 30px;
+            color: rgba(255, 255, 255, 0.88);
+        }
+
+        .benefits {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .benefits li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 18px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .benefits li::before {
+            content: '✔';
+            display: inline-flex;
+            margin-top: 2px;
+            min-width: 30px;
+            min-height: 30px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.16);
+            color: #fff;
+            font-size: 0.85rem;
+        }
+
+        .form-panel h2 {
+            font-family: 'Bree Serif', serif;
+            margin-bottom: 14px;
+            font-size: 2rem;
+        }
+
+        .form-panel p.subtitle {
+            margin-bottom: 28px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            border-radius: 18px;
+            color: #fff;
+            padding: 18px 20px;
+            box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.16);
+            caret-color: #fff;
+            min-height: 160px;
+            font-size: 1rem;
+            line-height: 1.8;
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.01em;
+            transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            resize: vertical;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.85);
+            opacity: 1;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #d8c7ff;
+            box-shadow: 0 0 0 4px rgba(216, 199, 255, 0.24);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .mic-box {
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .mic-box i {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            font-size: 26px;
+            color: #fff;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn-custom {
+            flex: 1;
+            min-width: 180px;
+            border-radius: 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            padding: 16px 0;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #8c54ff 0%, #ff5c8a 100%);
+            border: none;
+            color: #fff;
+        }
+
+        .btn-generate:hover {
+            filter: brightness(1.05);
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .result-card {
+            margin-top: 28px;
+            padding: 20px 22px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .result-card h3 {
+            margin-top: 0;
+            margin-bottom: 14px;
+            font-size: 1.15rem;
+        }
+
+        .loadContain {
+            display: none;
+            margin-top: 20px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 22px;
+        }
+
+        .loadContain h3 {
+            margin: 0 0 14px;
+            font-size: 1rem;
+            color: #f4efff;
+        }
+
+        .loader {
+            position: relative;
+            height: 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            overflow: hidden;
+        }
+
+        .loader::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -40%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(90deg, #ffffff, #f0c1ff);
+            animation: loading 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -40%; }
+            50% { left: 60%; }
+            100% { left: 100%; }
+        }
+
+        @media (max-width: 980px) {
+            .page-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .top-nav {
+                justify-content: center;
+                padding: 20px 16px 0;
+            }
+            .profile-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-nav">
+        <div class="profile" id="profileCard">
+            <div class="profile-pic" id="profileAvatar">AS</div>
+            <div class="profile-info">
+                <div class="name" id="profileName">User Name</div>
+                <div class="status">Logged in</div>
+            </div>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+    </div>
+
+    <div class="page-grid">
+        <section class="hero-panel">
+            <h1>Turn your voice into Indian Sign Language</h1>
+            <p>Enter your speech or use the microphone to capture audio, then generate a sign language video. This page is designed for clear workflows and faster generation with a touch of polished visual styling.</p>
+            <ul class="benefits">
+                <li>Instant speech capture and text preview</li>
+                <li>Accessible Indian Sign Language output</li>
+                <li>Clean layout for desktop and mobile</li>
+            </ul>
+        </section>
+
+        <section class="form-panel">
+            <h2>Start generating</h2>
+            <p class="subtitle">Speak or type your message below, then create the ISL video. Use the logout button at top to switch accounts.</p>
+            <form action="/speach" method="POST" id="speechForm">
+                <div class="form-group">
+                    <label for="textbox">Speech input</label>
+                    <textarea id="textbox" name="textbox" class="form-control" rows="5" placeholder="Type your message or use the mic"></textarea>
+                    <div class="mic-box">
+                        <i class="material-icons">mic</i>
+                        <input type="button" id="start-btn" class="btn btn-custom btn-cancel" value="Start Recording">
+                    </div>
+                </div>
+                <div class="action-row">
+                    <button id="generate-btn" class="btn btn-custom btn-generate" type="submit" onclick="myFunction()">Generate Video</button>
+                    <button id="cancel-btn" class="btn btn-custom btn-cancel" type="button">Clear</button>
+                </div>
+                <div class="loadContain" id="loadContain">
+                    <h3>Generating video, please wait...</h3>
+                    <div class="loader"></div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function getInitials(name) {
+            if (!name) return 'US';
+            const words = name.trim().split(/\s+/);
+            if (words.length === 1) return words[0].charAt(0).toUpperCase();
+            return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
+        }
+
+        const savedUser = localStorage.getItem('voiceIslUser');
+        const loggedIn = localStorage.getItem('voiceIslLoggedIn');
+        if (!savedUser || loggedIn !== 'true') {
+            window.location.href = '/login';
+        } else {
+            const user = JSON.parse(savedUser);
+            const profileName = document.getElementById('profileName');
+            const profileAvatar = document.getElementById('profileAvatar');
+            const displayName = user.username || user.email || 'User';
+            profileName.textContent = displayName;
+            profileAvatar.textContent = getInitials(displayName);
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            localStorage.removeItem('voiceIslLoggedIn');
+            window.location.href = '/login';
+        });
+
+        document.getElementById('profileCard').addEventListener('click', function () {
+            window.location.href = '/profile';
+        });
+
+        function myFunction() {
+            var x = document.getElementById('loadContain');
+            x.style.display = 'block';
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        const textbox = $('#textbox');
+        const startbtn = $('#start-btn');
+        let displayedText = '';
+        let pendingText = '';
+        let isAnimating = false;
+        let isRecording = false;
+        const typingDelay = 8;
+
+        recognition.continuous = true;
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = function () {
+            isRecording = true;
+            startbtn.val('Stop Recording');
+            startbtn.addClass('btn-generate');
+        };
+
+        recognition.onend = function () {
+            isRecording = false;
+            startbtn.val('Start Recording');
+            startbtn.removeClass('btn-generate');
+        };
+
+        recognition.onerror = function () {
+            isRecording = false;
+            startbtn.val('Try Again');
+            startbtn.removeClass('btn-generate');
+        };
+
+        function animatePendingText() {
+            if (!pendingText.length) {
+                isAnimating = false;
+                return;
+            }
+
+            isAnimating = true;
+            const nextChar = pendingText.charAt(0);
+            displayedText += nextChar;
+            pendingText = pendingText.slice(1);
+            textbox.val(displayedText);
+
+            const delay = nextChar === ' ' ? 25 : typingDelay;
+            setTimeout(animatePendingText, delay);
+        }
+
+        function queueText(text) {
+            const trimmed = text.trim();
+            if (!trimmed) return;
+
+            const separator = displayedText.length || pendingText.length ? ' ' : '';
+            pendingText += separator + trimmed;
+            if (!isAnimating) {
+                animatePendingText();
+            }
+        }
+
+        recognition.onresult = function (event) {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const result = event.results[i];
+                if (result.isFinal) {
+                    transcript += (transcript.length ? ' ' : '') + result[0].transcript.trim();
+                }
+            }
+            if (transcript) {
+                queueText(transcript);
+            }
+        };
+
+        $('#start-btn').click(function () {
+            if (!isRecording) {
+                recognition.start();
+            } else {
+                recognition.stop();
+            }
+        });
+
+        $('#cancel-btn').click(function () {
+            textbox.val('');
+            displayedText = '';
+            pendingText = '';
+            isAnimating = false;
+        });
+    </script>
+</body>
+
+</html>

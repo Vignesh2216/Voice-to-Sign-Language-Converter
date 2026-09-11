@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Voice to ISL</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #433d8b 0%, #7f57c5 50%, #c6b3ff 100%);
+            color: #fff;
+            font-family: 'Raleway', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .profile-card {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+        .profile-card h2 {
+            font-family: 'Bree Serif', serif;
+            margin-bottom: 20px;
+        }
+        .profile-card .form-control {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .profile-card .form-control::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        .editable-field {
+            position: relative;
+        }
+        .edit-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            padding: 4px;
+            font-size: 18px;
+        }
+        .change-password-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .change-password-row span {
+            color: rgba(255,255,255,0.9);
+        }
+        .change-password-row button {
+            min-width: 160px;
+        }
+        .password-fields {
+            display: none;
+            margin-top: 16px;
+        }
+        .password-wrapper {
+            position: relative;
+        }
+        .password-wrapper .form-control {
+            padding-right: 48px;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+            padding: 4px;
+        }
+        .btn-primary {
+            background: #fff;
+            color: #5b3b8a;
+            border: none;
+            font-weight: 700;
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.35);
+            color: #fff;
+        }
+        .help-text {
+            color: #eae3ff;
+            margin-bottom: 24px;
+        }
+        .heading-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .heading-row .back-link {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .heading-row .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <div class="heading-row">
+            <h2>Account Settings</h2>
+            <a class="back-link" href="/speech">Back to Generation</a>
+        </div>
+        <p class="help-text">Update your profile name and password. Changes are stored locally in the browser.</p>
+        <form id="profileForm">
+            <div class="form-group editable-field">
+                <label for="profileNameInput">Display Name</label>
+                <input type="text" id="profileNameInput" class="form-control" placeholder="Your name" readonly required>
+                <button type="button" id="editNameBtn" class="edit-btn" title="Edit name">✎</button>
+            </div>
+            <div class="form-group">
+                <label for="profileEmailInput">Email</label>
+                <input type="email" id="profileEmailInput" class="form-control" placeholder="Email address" disabled>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <div class="change-password-row">
+                    <span id="passwordDisplay">********</span>
+                    <button type="button" id="changePasswordBtn" class="btn btn-secondary">Change Password</button>
+                </div>
+            </div>
+            <div class="password-fields" id="passwordFields">
+                <div class="form-group">
+                    <label for="profilePasswordInput">New Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="profilePasswordInput" class="form-control" placeholder="Enter new password">
+                        <button type="button" class="toggle-password" data-target="profilePasswordInput" aria-label="Show new password">&#128065;</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="profilePasswordConfirmInput">Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="profilePasswordConfirmInput" class="form-control" placeholder="Confirm new password">
+                        <button type="button" class="toggle-password" data-target="profilePasswordConfirmInput" aria-label="Show confirm password">&#128065;</button>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+            <button type="button" id="logoutBtn" class="btn btn-secondary btn-block">Logout</button>
+        </form>
+    </div>
+
+    <script>
+        const savedUser = localStorage.getItem('voiceIslUser');
+        const loggedIn = localStorage.getItem('voiceIslLoggedIn');
+        if (!savedUser || loggedIn !== 'true') {
+            window.location.href = '/login';
+        } else {
+            const user = JSON.parse(savedUser);
+            document.getElementById('profileNameInput').value = user.username || '';
+            document.getElementById('profileEmailInput').value = user.email || '';
+        }
+
+        const profileNameInput = document.getElementById('profileNameInput');
+        const editNameBtn = document.getElementById('editNameBtn');
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
+        const passwordFields = document.getElementById('passwordFields');
+
+        document.querySelectorAll('.toggle-password').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const input = document.getElementById(button.dataset.target);
+                const isHidden = input.type === 'password';
+                input.type = isHidden ? 'text' : 'password';
+                button.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+            });
+        });
+
+        editNameBtn.addEventListener('click', function () {
+            profileNameInput.removeAttribute('readonly');
+            profileNameInput.focus();
+        });
+
+        changePasswordBtn.addEventListener('click', function () {
+            passwordFields.style.display = passwordFields.style.display === 'block' ? 'none' : 'block';
+            if (passwordFields.style.display === 'block') {
+                document.getElementById('profilePasswordInput').focus();
+            }
+        });
+
+        document.getElementById('profileForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const name = profileNameInput.value.trim();
+            const password = document.getElementById('profilePasswordInput').value;
+            const confirmPassword = document.getElementById('profilePasswordConfirmInput').value;
+            if (!name) {
+                alert('Please enter a display name.');
+                return;
+            }
+            if (password && password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+            const user = JSON.parse(localStorage.getItem('voiceIslUser')) || {};
+            user.username = name;
+            if (password) {
+                user.password = password;
+            }
+            localStorage.setItem('voiceIslUser', JSON.stringify(user));
+            alert('Profile updated successfully.');
+            window.location.href = '/speech';
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            localStorage.removeItem('voiceIslLoggedIn');
+            window.location.href = '/login';
+        });
+    </script>
+</body>
+</html>

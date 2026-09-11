@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice to Indian Sign Language</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #5b3b8a 0%, #8f5ebd 50%, #d8c7f2 100%);
+            color: #fff;
+            font-family: 'Raleway', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .landing {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+        .landing h1 {
+            font-family: 'Bree Serif', serif;
+            font-size: 3rem;
+            letter-spacing: 0.03em;
+        }
+        .landing p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #f4ebff;
+        }
+        .feature-list {
+            margin: 30px 0;
+        }
+        .feature-list li {
+            margin-bottom: 14px;
+        }
+        .btn-primary {
+            background-color: #ffffff;
+            color: #5b3b8a;
+            border: none;
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: 999px;
+        }
+        .btn-primary:hover {
+            background-color: #f3efff;
+            color: #4a2f7f;
+        }
+        .hero-card {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+        .hero-card h3 {
+            margin-bottom: 18px;
+        }
+        .hero-card p {
+            color: #e9dcff;
+        }
+    </style>
+</head>
+<body>
+    <section class="landing container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1>Voice to Indian Sign Language</h1>
+                <p>Convert spoken words into expressive Indian Sign Language animation and video. This project helps make voice input accessible to users who rely on ISL by generating sign language output from speech.</p>
+                <ul class="feature-list">
+                    <li>Record or type speech text</li>
+                    <li>Convert text to ISL animation</li>
+                    <li>Preview generated video output</li>
+                    <li>Easy mobile and desktop access</li>
+                </ul>
+                <a href="/generate" class="btn btn-primary">Go to Generation Page</a>
+            </div>
+            <div class="col-lg-5">
+                <div class="hero-card">
+                    <h3>How it works</h3>
+                    <p>Speak or enter a phrase on the generation page, then generate a sign language video. The server sends the text to the speech recognition module and returns an animated ISL output for playback.</p>
+                </div>
+                <div class="hero-card">
+                    <h3>Why this matters</h3>
+                    <p>Supporting Indian Sign Language helps bridge communication gaps for users who are deaf or hard of hearing, and makes voice-driven applications more inclusive.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
